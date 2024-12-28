@@ -23,9 +23,10 @@ export default function Header() {
                     }
                 </nav>
                 {
-                    status === 'loading' ? (
-                        <></>
-                    )
+                    status === 'loading' ?
+                        (
+                            <></>
+                        )
                         :
                         session ?
                             (
