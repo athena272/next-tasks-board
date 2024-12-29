@@ -28,14 +28,14 @@
     margin: 25px 0;
 }
 
-.checkboxArea label {
-    margin-left: 8px;
-    color: #fff;
-}
-
 .checkbox {
     width: 18px;
     height: 18px;
+}
+
+.checkboxArea label {
+    margin-left: 8px;
+    color: #fff;
 }
 
 .button {
