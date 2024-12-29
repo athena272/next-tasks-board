@@ -13,8 +13,7 @@
 .contentForm {
     max-width: 1024px;
     width: 100%;
-    padding: 0 18px;
-    padding-bottom: 28px;
+    padding: 0 18px 28px;
     margin-top: 58px;
 }
 
