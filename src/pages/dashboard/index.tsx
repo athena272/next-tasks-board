@@ -20,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 }
 
-
 export default function Dashboard() {
     return (
         <div className={styles.container}>
