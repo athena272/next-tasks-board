@@ -5,14 +5,22 @@ import styles from './Dashboard.module.css'
 import Textarea from "@/components/Textarea"
 import { FiShare2 } from "react-icons/fi"
 import { FaTrash } from "react-icons/fa"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { db } from "@/services/firebaseConnection"
-import { addDoc, collection } from "firebase/firestore"
+import { addDoc, collection, query, orderBy, where, onSnapshot } from "firebase/firestore"
 
 type DashboardProps = {
     user: {
         email: string
     }
+}
+
+type Task = {
+    id: string;
+    created: Date;
+    public: boolean;
+    tarefa: string;
+    user: string;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -39,6 +47,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 export default function Dashboard({ user }: DashboardProps) {
     const [input, setInput] = useState("")
     const [publicTask, setPublicTask] = useState(false)
+    const [tasks, setTasks] = useState<Task[]>([])
+
+    useEffect(() => {
+        async function loadTasks() {
+            const tasksRef = collection(db, "tasks")
+            const queryTasks = query(
+                tasksRef,
+                orderBy("created", "desc"),
+                where("user", "==", user?.email)
+            )
+        }
+
+        loadTasks()
+    }, [user?.email])
 
     function handleChangePublic(event: ChangeEvent<HTMLInputElement>) {
         setPublicTask(event.target.checked);
