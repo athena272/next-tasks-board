@@ -28,7 +28,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     return {
-        props: {}
+        props: {
+            user: {
+                email: session?.user?.email
+            }
+        }
     }
 }
 
@@ -40,12 +44,22 @@ export default function Dashboard({ user }: DashboardProps) {
         setPublicTask(event.target.checked);
     }
 
-    function handleRegisterTask(event: FormEvent) {
+    async function handleRegisterTask(event: FormEvent) {
         event.preventDefault();
 
         if (input === "") return;
 
-        alert("TESTE");
+        try {
+            await addDoc(collection(db, "tasks"), {
+                task: input,
+                created: new Date(),
+                user: user.email,
+                public: publicTask
+            })
+
+        } catch (error) {
+            console.log("🚀 ~ handleRegisterTask ~ error:", error)
+        }
     }
 
     return (
