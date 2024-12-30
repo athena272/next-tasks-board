@@ -53,10 +53,12 @@ export default function Dashboard({ user }: DashboardProps) {
             await addDoc(collection(db, "tasks"), {
                 task: input,
                 created: new Date(),
-                user: user.email,
+                user: user?.email,
                 public: publicTask
             })
 
+            setInput("")
+            setPublicTask(false)
         } catch (error) {
             console.log("🚀 ~ handleRegisterTask ~ error:", error)
         }
