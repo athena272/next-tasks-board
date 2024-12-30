@@ -6,6 +6,14 @@ import Textarea from "@/components/Textarea"
 import { FiShare2 } from "react-icons/fi"
 import { FaTrash } from "react-icons/fa"
 import { ChangeEvent, FormEvent, useState } from "react"
+import { db } from "@/services/firebaseConnection"
+import { addDoc, collection } from "firebase/firestore"
+
+type DashboardProps = {
+    user: {
+        email: string
+    }
+}
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const session = await getSession({ req })
@@ -24,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 }
 
-export default function Dashboard() {
+export default function Dashboard({ user }: DashboardProps) {
     const [input, setInput] = useState("")
     const [publicTask, setPublicTask] = useState(false)
 
@@ -55,6 +63,7 @@ export default function Dashboard() {
                                 placeholder="Digite qual sua tarefa..."
                                 value={input}
                                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)}
+                                required
                             />
                             <div className={styles.checkboxArea}>
                                 <input
