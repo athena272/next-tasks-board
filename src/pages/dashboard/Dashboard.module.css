@@ -47,3 +47,7 @@
     padding: 12px 0;
     font-size: 18px;
 }
+
+.button:hover {
+    cursor: pointer;
+}
