@@ -19,7 +19,7 @@ type Task = {
     id: string;
     created: Date;
     public: boolean;
-    tarefa: string;
+    task: string;
     user: string;
 }
 
@@ -57,6 +57,21 @@ export default function Dashboard({ user }: DashboardProps) {
                 orderBy("created", "desc"),
                 where("user", "==", user?.email)
             )
+
+            onSnapshot(queryTasks, (snapShot) => {
+                let tasksList: Task[] = []
+                snapShot.forEach(doc => {
+                    tasksList.push({
+                        id: doc.id,
+                        task: doc.data().task,
+                        created: doc.data().created,
+                        user: doc.data().user,
+                        public: doc.data().public
+                    })
+                })
+
+                setTasks(tasksList)
+            })
         }
 
         loadTasks()
@@ -119,8 +134,29 @@ export default function Dashboard({ user }: DashboardProps) {
                 </section>
                 <section className={styles.taskContainer}>
                     <h1>Minhas tarefas</h1>
+                    {
+                        tasks.map(task => (
+                            <article key={task.id} className={styles.task}>
+                                {task.public && (
+                                    <div className={styles.tagContainer}>
+                                        <label className={styles.tag}>PUBLICO</label>
+                                        <button className={styles.shareButton}>
+                                            <FiShare2 size={22} color="#3183ff" />
+                                        </button>
+                                    </div>
+                                )}
 
-                    <article className={styles.task}>
+                                <div className={styles.taskContent}>
+                                    <p>{task.task}</p>
+                                    <button className={styles.trashButton}>
+                                        <FaTrash size={24} color="#ea3140" />
+                                    </button>
+                                </div>
+                            </article>
+                        ))
+                    }
+
+                    {/* <article className={styles.task}>
                         <div className={styles.tagContainer}>
                             <label className={styles.tag}>PUBLICO</label>
                             <button className={styles.shareButton}>
@@ -134,7 +170,7 @@ export default function Dashboard({ user }: DashboardProps) {
                                 <FaTrash size={24} color="#ea3140" />
                             </button>
                         </div>
-                    </article>
+                    </article> */}
                 </section>
             </main>
         </div>
