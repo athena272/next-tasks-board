@@ -8,7 +8,7 @@ import { FiShare2 } from "react-icons/fi"
 import { FaTrash } from "react-icons/fa"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { db } from "@/services/firebaseConnection"
-import { addDoc, collection, query, orderBy, where, onSnapshot } from "firebase/firestore"
+import { addDoc, collection, query, orderBy, where, onSnapshot, doc, deleteDoc } from "firebase/firestore"
 
 type DashboardProps = {
     user: {
@@ -112,6 +112,11 @@ export default function Dashboard({ user }: DashboardProps) {
         alert(`URL ${urlToCopy} copiada com sucesso`)
     }
 
+    async function handleDelete(id: string) {
+        const docRef = doc(db, "tasks", id)
+        await deleteDoc(docRef)
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -170,7 +175,7 @@ export default function Dashboard({ user }: DashboardProps) {
                                                 <p>{task.task}</p>
                                             )
                                     }
-                                    <button className={styles.trashButton}>
+                                    <button className={styles.trashButton} onClick={() => handleDelete(task.id)}>
                                         <FaTrash size={24} color="#ea3140" />
                                     </button>
                                 </div>
