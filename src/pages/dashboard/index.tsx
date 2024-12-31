@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next"
+import Link from "next/link"
 import { getSession } from "next-auth/react"
 import Head from "next/head"
 import styles from './Dashboard.module.css'
@@ -101,6 +102,16 @@ export default function Dashboard({ user }: DashboardProps) {
         }
     }
 
+    async function handleShare(id: string) {
+        const urlToCopy = `${process.env.NEXT_PUBLIC_URL}/task/${id}`
+
+        await navigator.clipboard.writeText(
+            `${urlToCopy}`
+        )
+
+        alert(`URL ${urlToCopy} copiada com sucesso`)
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -140,14 +151,25 @@ export default function Dashboard({ user }: DashboardProps) {
                                 {task.public && (
                                     <div className={styles.tagContainer}>
                                         <label className={styles.tag}>PUBLICO</label>
-                                        <button className={styles.shareButton}>
+                                        <button className={styles.shareButton} onClick={() => handleShare(task.id)}>
                                             <FiShare2 size={22} color="#3183ff" />
                                         </button>
                                     </div>
                                 )}
 
                                 <div className={styles.taskContent}>
-                                    <p>{task.task}</p>
+                                    {
+                                        task.public ?
+                                            (
+                                                <Link href={`/task/${task.id}`}>
+                                                    <p>{task.task}</p>
+                                                </Link>
+                                            )
+                                            :
+                                            (
+                                                <p>{task.task}</p>
+                                            )
+                                    }
                                     <button className={styles.trashButton}>
                                         <FaTrash size={24} color="#ea3140" />
                                     </button>
